@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import '../styles/tasklist.scss'
 
-import { FiTrash, FiCheckSquare } from 'react-icons/fi'
+import { FiTrash, FiCheckSquare, FiSearch} from 'react-icons/fi'
 
 interface Task {
   id: number;
@@ -13,6 +13,7 @@ interface Task {
 export function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [search, setSearchTask] = useState('');
 
   function handleCreateNewTask() {
     if(!!newTaskTitle){
@@ -40,6 +41,13 @@ export function TaskList() {
     setTasks(removeTasks);
   }
 
+  function handleSearchTask(){
+    if(!search) return;
+    const searchTasks = tasks.filter(task=> task.title.includes(search.toLowerCase()))
+    setSearchTask('')
+    setTasks(searchTasks);
+  }
+
   return (
     <section className="task-list container">
       <header>
@@ -52,8 +60,17 @@ export function TaskList() {
             onChange={(e) => setNewTaskTitle(e.target.value)}
             value={newTaskTitle}
           />
-          <button type="submit" data-testid="add-task-button" onClick={handleCreateNewTask}>
+          <button id="Inserir" type="submit" data-testid="add-task-button" onClick={handleCreateNewTask}>
             <FiCheckSquare size={16} color="#fff"/>
+          </button>
+          <input 
+            type="text" 
+            placeholder="Pesquisar tarefa" 
+            onChange={(e) => setSearchTask(e.target.value)}
+            value={search}
+          />
+          <button id="Pesquisar" type="submit" onClick={handleSearchTask}>
+            <FiSearch size={16} color="#fff"/>
           </button>
         </div>
       </header>
